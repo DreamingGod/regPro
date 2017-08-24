@@ -1,0 +1,5 @@
+build/*.js
+config/*.js
+src/views/*.vue
+src/frame/*.js
+src/frame/nodeBack/*.js
