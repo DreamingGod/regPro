@@ -1,5 +1,5 @@
 /**
- * Created by yanqing on 2017/8/21.
+ * Created by yanqing on 2017/8/24.
  */
 var request = require('request');
 var bodyParser = require("body-parser");
@@ -9,13 +9,6 @@ app.post('/getInfo', function (req, res) {
   console.log(req.body.input)
   var phone = req.body.input;
   var returnMe;
-  // request('http://passport.chinahr.com/ajax/m/existLoginName?input='+phone, function (error, response, body) {
-  //   if (!error && response.statusCode == 200) {
-  //     console.log(body) // Show the HTML for the baidu homepage.
-  //     returnMe = body.returnMessage;
-  //     res.end(returnMe);
-  //   }
-  // })
 });
 
 
