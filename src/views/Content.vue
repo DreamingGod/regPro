@@ -49,7 +49,6 @@ export default {
       search (message) {
         this.$http.post('/getInfo',{input:message}).then(function(res){
           console.log(res.body)
-          console.log(res.body["returnMessage"])
         });
       }
     },

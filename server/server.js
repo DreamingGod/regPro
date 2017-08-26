@@ -1,20 +1,20 @@
 /**
  * Created by yanqing on 2017/8/24.
  */
-// const userApi = require('./api/urlList')
+const urlList = require('./api/urlList')
+const {requestUrl,getFirRen} = require('./public')
 const bodyParser = require('body-parser')
 const express = require('express')
-
 const app = express()
-
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 // 后端api路由
 app.post('/getInfo', function (req, res) {
-  console.log(req.body.input)
-  var phone = req.body.input;
-  var returnMe;
-  res.end("233")
+  let phone = req.body.input;
+  let t = urlList.slice(0,3);
+  getFirRen(t,phone,res).then(function (result) {
+    res.send(result)
+  })
 });
 
 // 监听端口
