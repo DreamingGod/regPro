@@ -14,14 +14,16 @@
   </div>
 </template>
 <script>
- import {getInfo} from '../vuex/getInfo/actions'
- console.log(getInfo)
+  import searchStore from '../vuex/search/store'
+  console.log(searchStore)
 export default {
   vuex: {
+    store:{
+      searchStore:searchStore
+    },
     getters: {
       },
     actions: {
-      getInfo: getInfo
     }
   },
   data () {
@@ -41,24 +43,17 @@ export default {
     },
   components: {
     },
-  route: {
-    },
   ready () {
     },
     methods: {
       search (message) {
+        const me = this;
         this.$http.post('/getInfo',{input:message}).then(function(res){
           console.log(res.body)
+          me.$router.push('/search')
+          searchStore.totalList = res.body;
         });
       }
-    },
-  events: {
-//      addActiveList (option) {
-//        this.activeList.push(option)
-//      },
-//      reduceActiveList (option) {
-//        this.activeList.splice(this.activeList.indexOf(option), 1)
-//      }
     }
   }
 </script>

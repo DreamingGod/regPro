@@ -9,6 +9,11 @@ const routes = [
     path: '/',
     name: 'Content',
     component: require('../views/Content.vue')
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: require('../views/search/Search.vue')
   }
 ]
 
