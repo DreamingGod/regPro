@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <el-tabs v-model="activeName" @tab-click="handleClick" type="card">
-      <el-tab-pane label="全部" name="first">用户管理</el-tab-pane>
+      <el-tab-pane label="全部" name="first">
+        <item-com  v-for="item in resultList" :item=item></item-com>
+      </el-tab-pane>
       <el-tab-pane label="名站" name="second">配置管理</el-tab-pane>
       <el-tab-pane label="购物" name="third">角色管理</el-tab-pane>
       <el-tab-pane label="金融" name="fourth">定时任务补偿</el-tab-pane>
@@ -19,14 +21,10 @@
   </div>
 </template>
 <script>
-  import searchStore from '../../vuex/search/store'
   import {searchGetters} from '../../vuex/getters'
-  console.log('z', searchStore)
+  import itemCom from '../../components/search/item.vue'
   export default {
     vuex: {
-      store: {
-        searchStore: searchStore
-      },
       getters: {
         resultList: searchGetters.resultList
       },
@@ -35,12 +33,19 @@
     },
     data () {
       return {
-        activeName: 'second'
+        resultList: []
       }
+    },
+    components: {
+      itemCom
     },
     methods: {
       handleClick (tab, event) {
       }
+    },
+    mounted: function () {
+      console.log('v', this.$route.params)
+      this.resultList = this.$route.params
     },
     /**
      * 路由函数
@@ -50,7 +55,6 @@
        */
       data ({to, from}) {
         console.log(from)
-        console.log(searchStore)
       }
     }
   }

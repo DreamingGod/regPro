@@ -1,5 +1,5 @@
 
-import * as searchGetters from '/search/getters'
+import * as searchGetters from '../vuex/search/getters'
 export {
   searchGetters
 }

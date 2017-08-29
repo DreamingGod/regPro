@@ -50,7 +50,8 @@ export default {
         const me = this;
         this.$http.post('/getInfo',{input:message}).then(function(res){
           console.log(res.body)
-          me.$router.push('/search')
+//          me.$router.push('/search')
+          this.$router.push({name: 'search', params: res.body})
           searchStore.totalList = res.body;
         });
       }
