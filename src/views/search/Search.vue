@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <el-tabs v-model="activeName" @tab-click="handleClick" type="card">
-      <el-tab-pane label="全部" name="first">
+      <el-tab-pane label="全部" name="first" class="is-active">
         <item-com  v-for="item in resultList" :item=item></item-com>
       </el-tab-pane>
       <el-tab-pane label="名站" name="second">配置管理</el-tab-pane>
@@ -33,7 +33,19 @@
     },
     data () {
       return {
-        resultList: []
+        resultList: [],
+        activeName: 'first'
+      }
+    },
+    computed: {
+      filterList: function () {
+        const cateList = [
+          '名站', '购物', '金融', '社交', '社区', '生活', '旅行', '游戏', '工具', '教育', '行业', '娱乐', '其他'
+        ];
+        return this.resultList.filter((item) => {
+          console.log(item)
+          return item[""]
+        })
       }
     },
     components: {
@@ -60,5 +72,10 @@
   }
 </script>
 <style lang="less">
-
+  li{
+    list-style-type: none;
+    .media-body{
+      padding-top: 0.5rem;
+    }
+  }
 </style>
