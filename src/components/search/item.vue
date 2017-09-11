@@ -10,11 +10,6 @@
 <script>
   export default {
     props: {
-      disabled: Boolean,
-      title: String,
-      order: String,
-      option: String,
-      btnActive: Boolean,
       resultList: [],
       item: {}
     },

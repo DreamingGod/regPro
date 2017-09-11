@@ -2,7 +2,7 @@
   <el-row>
     <el-col :span="24">
       <div class="grid-content bg-blue-light">
-        <span class="logo">爱找回</span>
+        <span class="logo" @click="backIndex">爱找回</span>
         <ul>
           <li><a href="/account/signin" id="nav_btn_signin">登录</a></li>
           <li><a href="/account/signup" id="nav_btn_signup"><strong>注册</strong></a></li>
@@ -14,13 +14,11 @@
 <script>
   export default {
     props: {
-      disabled: Boolean,
-      title: String,
-      order: String,
-      option: String,
-      btnActive: Boolean
     },
     methods: {
+      backIndex () {
+        this.$router.push({name: 'Content'})
+      }
     }
   }
 </script>
@@ -37,11 +35,12 @@
       min-height: 36px;
       ul li{
         float: left;
+        margin-right: 1rem !important;
       }
       .logo{
         font-size: 3rem;
         color: white;
-        margin-left: .5rem;
+        margin-left: .5rem !important;
       }
     }
   }
@@ -56,8 +55,8 @@
       color: white;
     }
     ul{
-      position: relative;
-      left: 50%;
+      position: absolute;
+      left: 70%;
     }
     ul li{
       float: left;
