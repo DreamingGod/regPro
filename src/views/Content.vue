@@ -1,63 +1,95 @@
 <template>
   <div class="container">
-    <div class="row">
-      <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-sm-offset-1 col-md-offset-2 col-lg-offset-3">
+      <div class="search-box">
         <h1 id="t_i_h1" style="font-size:32px;">你注册过哪些网站？<span class="sr-only">输入邮箱或手机号，一搜便知。</span></h1>
-          <div class="input-group">
-            <label class="sr-only" for="e_m">邮箱/手机号</label>
-            <input v-model="message"  style="height:40px;font-size:16px" id="e_m" maxlength="32" placeholder="邮箱/手机号" autocomplete="off" >
-            {{message}}
-            <button class="" v-on:click="search(message)"  style="padding:9px 22px;"></button>
-          </div>
+        <div class="search-input">
+        <el-form :model="ruleForm" ref="ruleForm" :rules="rules">
+        <el-form-item label="" prop="age">
+          <el-input v-model="ruleForm.age" placeholder="邮箱/手机号" autofocus style="display: inline-block"></el-input>
+          <el-button type="primary" icon="search" @click="search(ruleForm.age)" >搜索</el-button>
+        </el-form-item>
+        </el-form>
+        </div>
       </div>
-    </div>
   </div>
 </template>
 <script>
   import searchStore from '../vuex/search/store'
+  import ElForm from '../../node_modules/element-ui/packages/form/src/form'
   console.log(searchStore)
 export default {
-  vuex: {
-    store:{
-      searchStore:searchStore
-    },
-    getters: {
-      },
-    actions: {
-    }
-  },
-  data () {
+    data () {
+      var checkAge = (rule, value, callback) => {
+        const me = this
+        if(!value){
+          return callback(new Error('输入不得为空'))
+        }
+        setTimeout(() => {
+          const regP = /^1[34578][0-9]{9}/,
+            regM = /[a-zA-Z0-9]{1,10}@[a-zA-Z0-9]{1,5}\.[a-zA-Z0-9]{1,5}/;
+          if(regP.test(value) || regM.test(value)){
+            callback()
+            me.isCorr = true
+          }else{
+            callback(new Error('输入格式非法'))
+          }
+        }, 10)
+      }
       return {
-        message: '',
-        naireId: 0,
-        activeList: [],
-        activeOpt: false,
-        btnActive: false,
-        scrollerHeight: '0px'
+        isCorr: false,
+        ruleForm: {
+          pass: '',
+          checkPass: '',
+          age: ''
+        },
+        rules:{
+          age: [
+            { validator: checkAge, trigger: 'blur' }
+          ]
+        }
       }
     },
-  computed: {
-      isAccordSubmit () {
-        return this.activeList.indexOf('A') >= 0 && this.activeList.indexOf('B') >= 0 && this.activeList.indexOf('C') >= 0
-      }
+    computed: {
     },
-  components: {
+    components: {
+      ElForm
     },
-  ready () {
+    ready () {
     },
     methods: {
       search (message) {
-        const me = this;
+        console.log(this.isCorr)
+        if(!this.isCorr) return
         this.$http.post('/getInfo',{input:message}).then(function(res){
           console.log(res.body)
-//          me.$router.push('/search')
           this.$router.push({name: 'search', params: res.body})
           searchStore.totalList = res.body;
-        });
+        })
       }
     }
   }
 </script>
 <style lang="less">
+  .search-box{
+    margin-left: 21rem;
+    margin-top: 14rem;
+    .search-input{
+      margin-top: 2rem;
+      .el-input{
+        width: 47%;
+      }
+    }
+  }
+
+
+  @media screen and (max-width: 1024px) {
+    .search-box{
+      margin-top: 16rem;
+      margin-left: 0;
+    }
+    .el-input{
+      width: 70% !important;
+    }
+  }
 
 </style>
