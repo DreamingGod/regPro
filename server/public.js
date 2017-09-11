@@ -7,11 +7,10 @@ const requestUrl = function (url , phone){
   return new Promise(function (resolve, reject) {
     request(url["url"] + phone, function (error, response, body) {
       if (!error && JSON.parse(body)[url.infoCheckField] === url["validMessage"]) {
-        console.log("success")
         var rM = url["websiteInfo"]
         resolve(rM)
       }else{
-        reject(error)
+        resolve({})
       }
     })
   })

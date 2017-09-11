@@ -1,15 +1,8 @@
 <template>
-  <!--"websiteInfo": {-->
-  <!--"atavar":"https://static2.reg007.com/app/tuniu.jpg",-->
-  <!--"title":"途牛旅游网",-->
-  <!--"cate":"旅行",-->
-  <!--"descri":"途牛旅游网-中国专业全面的旅游网,客户满意度94%;提供自助游(自由行),国内旅游,出境旅游,自驾游,公司旅游。低价保证,专业服务,九大出游保障,服务超百万人出游。",-->
-  <!--"weburl":"http://www.tuniu.com/"-->
-  <!--}-->
   <li class="media gad r7-sr-only" data-category="" >
     <a class="pull-left" target="_blank" :href=item.weburl><img class="media-object" :src=item.atavar></a>
     <div class="media-body">
-      <h4 class="media-heading"><a target="_blank" :href=item.weburl>{{item.title}}</a><small> | <a href="#">{{item.cate}}</a></small></h4>
+      <h4 class="media-heading"><a target="_blank" :href=item.weburl>{{item.title}}</a><small> {{spT}} <a href="#">{{item.cate}}</a></small></h4>
       <p>{{item.descri}}</p>
     </div>
   </li>
@@ -24,6 +17,16 @@
       btnActive: Boolean,
       resultList: [],
       item: {}
+    },
+    computed: {
+      spT: function () {
+        console.log(this.item)
+        if (JSON.stringify(this.item) === '{}') {
+          return ''
+        } else {
+          return '|'
+        }
+      }
     },
     methods: {
     }
