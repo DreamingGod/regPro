@@ -37,7 +37,9 @@
     methods: {
       handleClick: function (tab, event) {
         this.cateRenList = this.resultList.filter((item) => {
-          return item['cate'].indexOf(event.target.innerText) >= 0
+          if (item['cate']) {
+            return item['cate'].indexOf(event.target.innerText) >= 0
+          }
         })
       }
     },
