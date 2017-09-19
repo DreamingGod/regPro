@@ -84,7 +84,7 @@ export default {
 
   @media screen and (max-width: 1024px) {
     .search-box{
-      margin-top: 16rem;
+      margin-top: 8rem;
       margin-left: 0;
     }
     .el-input{

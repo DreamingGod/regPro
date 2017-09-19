@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // 后端api路由
 app.post('/getInfo', function (req, res) {
   let phone = req.body.input;
-  let t = urlList.slice(0,3);
+  let t = urlList;
   getFirRen(t,phone,res).then(function (result) {
     res.send(result)
   })

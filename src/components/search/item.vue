@@ -1,6 +1,6 @@
 <template>
   <li class="media gad r7-sr-only" data-category="" >
-    <a class="pull-left" target="_blank" :href=item.weburl><img class="media-object" :src=item.atavar></a>
+    <a class="pull-left" target="_blank" :href=item.weburl><img class="media-object" :src=item.atavar width="72" height="72"></a>
     <div class="media-body">
       <h4 class="media-heading"><a target="_blank" :href=item.weburl>{{item.title}}</a><small> {{spT}} <a href="#">{{item.cate}}</a></small></h4>
       <p>{{item.descri}}</p>
