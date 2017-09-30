@@ -11,7 +11,7 @@
     <div v-if="unlogin" id="maskItem">
       <div class="content">
         <div>
-          <a class="auth_dialog">登录 </a>或<a class="auth_dialog"> 注册</a>，让我们更懂你，就能更多帮到你
+          <a class="auth_dialog">登录</a>或<a class="auth_dialog"> 注册</a>，让我们更懂你，就能更多帮到你
         </div>
       </div>
     </div>
@@ -20,12 +20,6 @@
 <script>
   import itemCom from '../../components/search/item.vue'
   export default {
-    vuex: {
-      getters: {
-      },
-      actions: {
-      }
-    },
     data () {
       return {
         unlogin: true,

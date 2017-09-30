@@ -16,7 +16,6 @@
 <script>
   import searchStore from '../vuex/search/store'
   import ElForm from '../../node_modules/element-ui/packages/form/src/form'
-  console.log(searchStore)
 export default {
     data () {
       var checkAge = (rule, value, callback) => {
