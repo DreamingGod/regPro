@@ -4,9 +4,9 @@
       <div class="grid-content bg-blue-light">
         <span class="logo" @click="backIndex">爱找回</span>
         <ul>
-          <li><el-button href="/account/signin" id="nav_btn_signin"  type="text" @click="dialogFormVisible = true">登录</el-button></li>
-          <li><a href="/account/signup" id="nav_btn_signup"><strong>注册</strong></a></li>
-          <el-dialog title="登陆" :visible.sync="dialogFormVisible">
+          <li><el-button  id="nav_btn_signin"  type="text" @click="setRegVal(1)">登录</el-button></li>
+          <li><el-button  id="nav_btn_signup"  type="text" @click="setRegVal(2)">注册</el-button></li>
+          <el-dialog :title="formTitle" :visible.sync="dialogFormVisible">
             <el-form :model="ruleForm" ref="ruleForm" :rules="rules">
               <el-form-item>
                 <el-input placeholder="手机/邮箱" v-model="form.name" auto-complete="off"></el-input>
@@ -14,7 +14,10 @@
                 <el-form-item>
                 <el-input placeholder="密码" v-model="form.name" auto-complete="off"></el-input>
               </el-form-item>
-              <el-button type="primary" size="large" class="gotologin">登陆</el-button>
+              <el-form-item v-if="isRegForm">
+                <el-input placeholder="邀请码" v-model="form.name" auto-complete="off"></el-input>
+              </el-form-item>
+              <el-button type="primary" size="large" class="gotologin">{{btnText}}</el-button>
               <div class="detail-l">
 			          	<a href="/account/forgot">忘记了密码?</a>
                   <a class="pull-right" href="/account/signup" target="_blank">没有账号? 马上注册</a>
@@ -33,22 +36,25 @@
     data () {
       var checkAge = (rule, value, callback) => {
         const me = this
-        if(!value){
+        if (!value) {
           return callback(new Error('输入不得为空'))
         }
         setTimeout(() => {
-          const regP = /^1[34578][0-9]{9}/,
-            regM = /[a-zA-Z0-9]{1,10}@[a-zA-Z0-9]{1,5}\.[a-zA-Z0-9]{1,5}/;
-          if(regP.test(value) || regM.test(value)){
+          const regP = /^1[34578][0-9]{9}/
+          const regM = /[a-zA-Z0-9]{1,10}@[a-zA-Z0-9]{1,5}\.[a-zA-Z0-9]{1,5}/
+          if (regP.test(value) || regM.test(value)) {
             callback()
             me.isCorr = true
-          }else{
+          } else {
             callback(new Error('输入格式非法'))
           }
         }, 10)
       }
       return {
         dialogFormVisible: false,
+        isRegForm: false,
+        formTitle: '登录',
+        btnText: '登录',
         form: {
           name: '',
           region: '',
@@ -66,7 +72,7 @@
           checkPass: '',
           age: ''
         },
-        rules:{
+        rules: {
           age: [
             { validator: checkAge, trigger: 'blur' }
           ]
@@ -76,6 +82,16 @@
     methods: {
       backIndex () {
         this.$router.push({name: 'Content'})
+      },
+      setRegVal (itT) {
+        if (itT === 1) {
+          this.formTitle = this.btnText = '登录'
+          this.isRegForm = !1  // 邀请码不可见
+        } else {
+          this.formTitle = this.btnText = '注册'
+          this.isRegForm = true  // 邀请码可见
+        }
+        this.dialogFormVisible = true
       }
     }
   }
@@ -89,6 +105,7 @@
   }
   .el-dialog--small{
     width: 28%;
+    top: 30%;
     border-radius: 10px;
     .detail-l{
       a{color:#337ab7 !important;}
@@ -98,6 +115,17 @@
     width: 100% !important;
   }
   @media screen and (max-width: 1024px) {
+    .el-dialog--small{
+      width: 78%;
+      top: 23% !important;
+      border-radius: 10px;
+      .el-input{
+        width: 100% !important;
+      }
+      .detail-l{
+        a{color:#337ab7 !important;}
+      }
+    }
     .grid-content {
       display: flex;
       height: 4.5rem;
