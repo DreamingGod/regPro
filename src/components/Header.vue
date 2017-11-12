@@ -6,21 +6,21 @@
         <ul>
           <li><el-button  id="nav_btn_signin"  type="text" @click="setRegVal(1)">登录</el-button></li>
           <li><el-button  id="nav_btn_signup"  type="text" @click="setRegVal(2)">注册</el-button></li>
-          <el-dialog :title="formTitle" :visible.sync="dialogFormVisible">
+          <el-dialog :title="formTitle" :visible.sync="dialogFormVisible" :before-close="handleClose">
             <el-form :model="ruleForm" ref="ruleForm" :rules="rules">
-              <el-form-item>
-                <el-input placeholder="手机/邮箱" v-model="form.name" auto-complete="off"></el-input>
+              <el-form-item prop="phone">
+                <el-input placeholder="手机/邮箱" type="phone" v-model="ruleForm.phone"></el-input>
               </el-form-item>
-                <el-form-item>
-                <el-input placeholder="密码" v-model="form.name" auto-complete="off"></el-input>
+              <el-form-item prop="pwd">
+                <el-input placeholder="密码" type="password" v-model="ruleForm.pwd" ></el-input>
               </el-form-item>
-              <el-form-item v-if="isRegForm">
-                <el-input placeholder="邀请码" v-model="form.name" auto-complete="off"></el-input>
+              <el-form-item v-if="isRegForm" prop="scode">
+                <el-input placeholder="邀请码" v-model="ruleForm.scode"></el-input>
               </el-form-item>
-              <el-button type="primary" size="large" class="gotologin">{{btnText}}</el-button>
+              <el-button type="primary" size="large" class="gotologin" @click="golor">{{btnText}}</el-button>
               <div class="detail-l">
 			          	<a href="/account/forgot">忘记了密码?</a>
-                  <a class="pull-right" href="/account/signup" target="_blank">没有账号? 马上注册</a>
+                  <!--<a class="pull-right" href="/account/signup" target="_blank">没有账号? 马上注册</a>-->
 			        </div>
             </el-form>
           </el-dialog>
@@ -40,15 +40,28 @@
           return callback(new Error('输入不得为空'))
         }
         setTimeout(() => {
-          const regP = /^1[34578][0-9]{9}/
-          const regM = /[a-zA-Z0-9]{1,10}@[a-zA-Z0-9]{1,5}\.[a-zA-Z0-9]{1,5}/
-          if (regP.test(value) || regM.test(value)) {
+          if (this.regRules.regP.test(value) || this.regRules.regM.test(value)) {
             callback()
             me.isCorr = true
           } else {
             callback(new Error('输入格式非法'))
           }
         }, 10)
+      }
+      var checkPwd = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('输入不得为空'))
+        } else {
+          callback()
+        }
+      }
+      var checkScode = (rule, value, callback) => {
+        console.log(value, callback)
+        if (!value) {
+          return callback(new Error('邀请码不得为空'))
+        } else {
+          callback()
+        }
       }
       return {
         dialogFormVisible: false,
@@ -67,19 +80,33 @@
         },
         formLabelWidth: '120px',
         isCorr: false,
-        ruleForm: {
-          pass: '',
-          checkPass: '',
-          age: ''
-        },
-        rules: {
-          age: [
+        rules: {   /* 表单验证规则 */
+          phone: [
             { validator: checkAge, trigger: 'blur' }
+          ],
+          pwd: [
+            { validator: checkPwd, trigger: 'blur' }
+          ],
+          scode: [
+            { validator: checkScode, trigger: 'blur' }
           ]
+        },
+        ruleForm: {
+          pwd: '',
+          phone: '',
+          scode: ''
+        },
+        regRules: {
+          regP: /^1[34578]\d{9}$/,
+          regM: /[a-zA-Z0-9]{1,10}@[a-zA-Z0-9]{1,5}\.[a-zA-Z0-9]{1,5}/
         }
       }
     },
     methods: {
+      handleClose (done) {
+        done()
+        this.ruleForm = {}
+      },
       backIndex () {
         this.$router.push({name: 'Content'})
       },
@@ -92,6 +119,24 @@
           this.isRegForm = true  // 邀请码可见
         }
         this.dialogFormVisible = true
+      },
+      golor () {
+        console.log(this.btnText)
+        this.submitForm()
+        if (this.btnText === '注册') {
+
+        }
+      },
+      submitForm () {
+        this.$refs['ruleForm'].validate((valid) => {
+          console.log('valid', valid)
+          if (valid) {
+            alert('submit!')
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
       }
     }
   }
