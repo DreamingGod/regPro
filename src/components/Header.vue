@@ -49,6 +49,7 @@
         }, 10)
       }
       var checkPwd = (rule, value, callback) => {
+        // 需要抛出callback() 不然一直loading
         if (!value) {
           return callback(new Error('输入不得为空'))
         } else {
@@ -56,7 +57,6 @@
         }
       }
       var checkScode = (rule, value, callback) => {
-        console.log(value, callback)
         if (!value) {
           return callback(new Error('邀请码不得为空'))
         } else {
@@ -92,13 +92,17 @@
           ]
         },
         ruleForm: {
-          pwd: '',
-          phone: '',
+          pwd: '123456',
+          phone: '15800984101',
           scode: ''
         },
         regRules: {
           regP: /^1[34578]\d{9}$/,
           regM: /[a-zA-Z0-9]{1,10}@[a-zA-Z0-9]{1,5}\.[a-zA-Z0-9]{1,5}/
+        },
+        setUser: {
+          phone: '',
+          pwd: ''
         }
       }
     },
@@ -121,22 +125,55 @@
         this.dialogFormVisible = true
       },
       golor () {
-        console.log(this.btnText)
         this.submitForm()
         if (this.btnText === '注册') {
-
+          // @1点击注册按钮会先校验规则, @2若规则正确则会校验手机或邮箱已经注册过了，@3最后校验邀请码是否正确
+          // TODO 目前完成@1
+          // validatePhone () @2
+          if (this.checkCodeExist(this.ruleForm.scode)) {
+            // 邀请码通过 注册用户信息
+            this.setUser.phone = this.ruleForm.phone
+            this.setUser.pwd = this.ruleForm.pwd
+            this.signup(this.setUser)
+          }
         }
       },
       submitForm () {
         this.$refs['ruleForm'].validate((valid) => {
-          console.log('valid', valid)
           if (valid) {
-            alert('submit!')
           } else {
             console.log('error submit!!')
             return false
           }
         })
+      },
+      signup (user) {
+        // 待写入数据库的用户信息
+        this.$http.post('/api/signup', {user: user}).then(function (res) {
+          console.log(res.body)
+          if (res.body === 'ok') {
+            // 邀请码无效提示 todo 需要一个接口
+            this.$message.success('恭喜你, 注册成功')
+          } else if (res.body === 'duplicate key') {
+            // 有效既去新的用户页面或显示用户个人信息 若失败提示用户名已经注册过了
+            this.$message.error('用户名已被注册了！')
+          }
+        })
+      },
+      checkCodeExist (scode) {
+        // 校验邀请码是否正确
+        // this.$http.post('/api/checkCode', {input: scode}).then(function (res) {
+        //   console.log(res.body)
+        //   if (!res.body) {
+        //     // 邀请码无效提示 todo 需要一个接口
+        //     this.$message.error('邀请码无效噢！'); return false
+        //   } else {
+        //     return true
+        //   }
+        //   // this.$router.push({name: 'search', params: res.body})
+        //   // searchStore.totalList = res.body;
+        // })
+        return true
       }
     }
   }

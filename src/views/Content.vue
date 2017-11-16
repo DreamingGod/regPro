@@ -59,7 +59,7 @@ export default {
       search (message) {
         console.log(this.isCorr)
         if(!this.isCorr) return
-        this.$http.post('/getInfo',{input:message}).then(function(res){
+        this.$http.post('/api/getInfo',{input:message}).then(function(res){
           console.log(res.body)
           this.$router.push({name: 'search', params: res.body})
           searchStore.totalList = res.body;
