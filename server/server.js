@@ -60,11 +60,20 @@ app.post('/api/checkCode', function (req, res) {
 */
 app.post('/api/signup', function (req, res) {
     // 用户信息写入数据库 需要先查找没有找到的话就保存 TODO
-    console.log('body', req.body)
+   console.log('body', req.body)
    var user = new User(req.body.user)
-   user.save(function (err, res) {
-     if (err) return res.send("未保存成功")
-     console.log(res)
+   User.findOne({'phone': req.body.user.phone}, function (err, reo) {
+     if (err) console.log(err)
+     console.log("粉丝", reo); 
+     if (!reo) {
+      user.save(function (err, result) {
+        if (err) return res.send("未保存成功")
+        console.log('发多少', result)
+        res.send("ok")
+      })
+     } else {
+      res.send("duplicate key")
+     }
    })
 });
 

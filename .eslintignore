@@ -2,5 +2,6 @@ build/*.js
 config/*.js
 src/views/*.vue
 src/frame/*.js
+db/*.js
 server/*.js
 server/api/*.js
