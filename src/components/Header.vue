@@ -138,16 +138,18 @@
         })
       },
       validL () {
+        this.setUser.phone = this.ruleForm.phone
+        this.setUser.pwd = this.ruleForm.pwd
         if (this.btnText === '注册') {
             // @1点击注册按钮会先校验规则, @2若规则正确则会校验手机或邮箱已经注册过了，@3最后校验邀请码是否正确
             // TODO 目前完成@1
             // validatePhone () @2
           if (this.checkCodeExist(this.ruleForm.scode)) {
               // 邀请码通过 注册用户信息
-            this.setUser.phone = this.ruleForm.phone
-            this.setUser.pwd = this.ruleForm.pwd
             this.signup(this.setUser)
           }
+        } else if (this.btnText === '登录') {
+          this.loginin(this.setUser)
         }
       },
       signup (user) {
@@ -157,6 +159,7 @@
           if (res.body === 'ok') {
             // 注册成功关闭弹窗 不显示用户信息
             this.$message.success('恭喜你, 注册成功，可以登录探索新的世界了')
+            this.dialogFormVisible = false
           } else if (res.body === 'duplicate key') {
             // 有效既去新的用户页面或显示用户个人信息 若失败提示用户名已经注册过了
             this.$message.error('用户名已被注册了！')
