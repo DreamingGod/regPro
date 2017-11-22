@@ -4,8 +4,10 @@
       <div class="grid-content bg-blue-light">
         <span class="logo" @click="backIndex">爱找回</span>
         <ul>
-          <li><el-button  id="nav_btn_signin"  type="text" @click="setRegVal(1)">登录</el-button></li>
-          <li><el-button  id="nav_btn_signup"  type="text" @click="setRegVal(2)">注册</el-button></li>
+          <li v-if="!isLogin"><el-button  id="nav_btn_signin"  type="text" @click="setRegVal(1)">登录</el-button></li>
+          <li v-if="!isLogin"><el-button  id="nav_btn_signup"  type="text" @click="setRegVal(2)">注册</el-button></li>
+          <li v-if="isLogin"><el-button  id="nav_btn_signup"  type="text" >{{this.setUser.phone}}</el-button></li>
+          <li v-if="isLogin"><el-button  id="nav_btn_signup"  type="text" @click="loginout(this.setUser)">退出</el-button></li>
           <el-dialog :title="formTitle" :visible.sync="dialogFormVisible" :before-close="handleClose">
             <el-form :model="ruleForm" ref="ruleForm" :rules="rules">
               <el-form-item prop="phone">
@@ -68,6 +70,7 @@
         isRegForm: false,
         formTitle: '登录',
         btnText: '登录',
+        isLogin: false,
         form: {
           name: '',
           region: '',
@@ -159,12 +162,28 @@
           if (res.body === 'ok') {
             // 注册成功关闭弹窗 不显示用户信息
             this.$message.success('恭喜你, 注册成功，可以登录探索新的世界了')
-            this.dialogFormVisible = false
+            this.dialogFormVisible = false; this.ruleForm = {}
           } else if (res.body === 'duplicate key') {
             // 有效既去新的用户页面或显示用户个人信息 若失败提示用户名已经注册过了
             this.$message.error('用户名已被注册了！')
           }
         })
+      },
+      loginin (user) {
+        this.$http.post('/api/login', {user: user}).then(function (res) {
+          console.log(user)
+          if (res.body === 'ok') {
+            // 注册成功关闭弹窗 不显示用户信息
+            this.$message.success('登录成功！ 可以体会到会员的乐趣了')
+            this.isLogin = true; this.dialogFormVisible = false
+          } else if (res.body === 'err') {
+            // 有效既去新的用户页面或显示用户个人信息 若失败提示用户名已经注册过了
+            this.$message.error('用户名与密码不匹配')
+          }
+        })
+      },
+      loginout (user) {
+        this.user = {}; history.go(0)
       },
       checkCodeExist (scode) {
         // 校验邀请码是否正确

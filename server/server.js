@@ -77,6 +77,23 @@ app.post('/api/signup', function (req, res) {
    })
 });
 
+/*
+**  用户登录
+*/
+app.post('/api/login', function (req, res) {
+  // 用户信息写入数据库 需要先查找没有找到的话就保存 TODO
+ console.log('body', req.body)
+ var user = new User(req.body.user)
+ User.findOne({'phone': req.body.user.phone, pwd: req.body.user.pwd}, function (err, reo) {
+   console.log("匹配", reo)
+   if (!reo) {
+      res.send("err")
+   } else {
+      res.send("ok")
+   }
+ })
+});
+
 // 监听端口
 app.listen(9090)
 console.log('success listen at port:9090......')
