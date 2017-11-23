@@ -22,7 +22,7 @@
               <el-button type="primary" size="large" class="gotologin" @click="golor">{{btnText}}</el-button>
               <div class="detail-l">
 			          	<a href="/account/forgot">忘记了密码?</a>
-                  <!--<a class="pull-right" href="/account/signup" target="_blank">没有账号? 马上注册</a>-->
+                  <a v-if="formTitle === '注册'" class="pull-right" href="/account/signup" target="_blank">点击获得邀请码</a>
 			        </div>
             </el-form>
           </el-dialog>
