@@ -14,6 +14,11 @@ const routes = [
     path: '/search',
     name: 'search',
     component: require('../views/search/Search.vue')
+  },
+  {
+    path: '/getcode',
+    name: 'getcode',
+    component: require('../views/getcode.vue')
   }
 ]
 
