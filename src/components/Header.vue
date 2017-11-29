@@ -22,7 +22,8 @@
               <el-button type="primary" size="large" class="gotologin" @click="golor">{{btnText}}</el-button>
               <div class="detail-l">
 			          	<a href="/account/forgot">忘记了密码?</a>
-                  <a v-if="formTitle === '注册'" class="pull-right" href="/account/signup" target="_blank">点击获得邀请码</a>
+                    <router-link to="/getcode" v-if="formTitle === '注册'" class="pull-right"  target="_blank">点击获得邀请码</router-link>
+                  <!-- @click="getcode()" -->
 			        </div>
             </el-form>
           </el-dialog>
@@ -199,6 +200,10 @@
         //   // searchStore.totalList = res.body;
         // })
         return true
+      },
+      getcode () {
+        this.dialogFormVisible = false
+        this.$router.push({name: 'getcode'})
       }
     }
   }
