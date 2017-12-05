@@ -69,6 +69,9 @@
       }
     }
   }
+  .footer-links{
+    cursor: pointer !important;
+  }
   .show_detail_box{
     line-height: 2rem;
     font-size: 1.5rem;

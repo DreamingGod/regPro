@@ -6,7 +6,7 @@
         <ul>
           <li v-if="!isLogin"><el-button  id="nav_btn_signin"  type="text" @click="setRegVal(1)">登录</el-button></li>
           <li v-if="!isLogin"><el-button  id="nav_btn_signup"  type="text" @click="setRegVal(2)">注册</el-button></li>
-          <li v-if="isLogin"><el-button  id="nav_btn_signup"  type="text" >{{this.setUser.phone}}</el-button></li>
+          <li v-if="isLogin"><el-button  id="nav_btn_signup"  type="text" >{{this.setUser.phone || this.ckName}}</el-button></li>
           <li v-if="isLogin"><el-button  id="nav_btn_signup"  type="text" @click="loginout(this.setUser)">退出</el-button></li>
           <el-dialog :title="formTitle" :visible.sync="dialogFormVisible" :before-close="handleClose">
             <el-form :model="ruleForm" ref="ruleForm" :rules="rules">
@@ -21,8 +21,11 @@
               </el-form-item>
               <el-button type="primary" size="large" class="gotologin" @click="golor">{{btnText}}</el-button>
               <div class="detail-l">
-			          	<a href="/account/forgot">忘记了密码?</a>
-                    <router-link to="/getcode" v-if="formTitle === '注册'" class="pull-right"  target="_blank">点击获得邀请码</router-link>
+                <el-tooltip class="item"  placement="top-start" >
+                  <div slot="content" class="show_detail_box">请发送账号到邮箱: ritsu.yan@foxmail.com </div>
+                  <span id="forgotPwd">忘记了密码?</span>
+                </el-tooltip>
+                <router-link to="/getcode" v-if="formTitle === '注册'" class="pull-right"  target="_blank">点击获得邀请码</router-link>
                   <!-- @click="getcode()" -->
 			        </div>
             </el-form>
@@ -110,7 +113,32 @@
         }
       }
     },
+    mounted () {
+      console.log('ps', this.getCookie('phone'))
+      if (this.getCookie('phone')) {
+        // 如果cookie有值则
+        this.ckName = this.getCookie('phone'); this.isLogin = true
+        console.log('ritsu', this.ckName)
+      }
+    },
     methods: {
+      getCookie (name) {
+        var reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)')
+        var arr = document.cookie.match(reg)
+        if (arr) {
+          return unescape(arr[2])
+        } else {
+          return null
+        }
+      },
+      delCookie (name) {
+        var exp = new Date()
+        exp.setTime(exp.getTime() - 1)
+        var cval = this.getCookie(name)
+        if (cval != null) {
+          document.cookie = name + '=' + cval + ';expires=' + exp.toGMTString()
+        }
+      },
       handleClose (done) {
         done()
         this.ruleForm = {}
@@ -172,7 +200,6 @@
       },
       loginin (user) {
         this.$http.post('/api/login', {user: user}).then(function (res) {
-          console.log(user)
           if (res.body === 'ok') {
             // 注册成功关闭弹窗 不显示用户信息
             this.$message.success('登录成功！ 可以体会到会员的乐趣了')
@@ -184,7 +211,7 @@
         })
       },
       loginout (user) {
-        this.user = {}; history.go(0)
+        this.user = {}; this.ckName = ''; location.reload(); this.delCookie('phone')
       },
       checkCodeExist (scode) {
         // 校验邀请码是否正确
@@ -226,6 +253,37 @@
   .gotologin{
     width: 100% !important;
   }
+  .grid-content {
+    display: flex;
+    height: 4.5rem;
+    line-height: 4.5rem;
+    border-radius: 4px;
+    min-height: 36px;
+    color: white;
+    a{
+      color: white;
+    }
+    ul{
+      position: absolute;
+      left:70%;
+    }
+    ul li{
+      float: left;
+      margin-right: 3rem;
+      color: white;
+      list-style-type: none;
+      font-size: 1.5rem;
+    }
+    .logo{
+      font-size: 3rem;
+      margin-left: 29rem;
+      user-select: none;
+    }
+  }
+  #forgotPwd{
+    cursor: pointer;
+    color: #20a0ff;
+  }
   @media screen and (max-width: 1024px) {
     .el-dialog--small{
       width: 78%;
@@ -244,6 +302,10 @@
       line-height: 4.5rem;
       border-radius: 4px;
       min-height: 36px;
+      ul{
+      position: absolute;
+      left:54%;
+      }
       ul li{
         float: left;
         margin-right: 1rem !important;
@@ -253,32 +315,6 @@
         color: white;
         margin-left: .5rem !important;
       }
-    }
-  }
-  .grid-content {
-    display: flex;
-    height: 4.5rem;
-    line-height: 4.5rem;
-    border-radius: 4px;
-    min-height: 36px;
-    color: white;
-    a{
-      color: white;
-    }
-    ul{
-      position: absolute;
-      left: 70%;
-    }
-    ul li{
-      float: left;
-      margin-right: 3rem;
-      color: white;
-      list-style-type: none;
-      font-size: 1.5rem;
-    }
-    .logo{
-      font-size: 3rem;
-      margin-left: 29rem;
     }
   }
 </style>

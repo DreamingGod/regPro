@@ -1,7 +1,8 @@
 #2017 11 22 
 完成登录 退出功能
-todo  数据持久化 session or cookie
-todo  获取邀请码
+todo  是否忘记密码 验证码 可暂时要求发email到后台  fixed
+todo  数据持久化 session or cookie  fixed
+todo  获取邀请码 配合支付宝当面付功能
 todo  持续添加网站
 todo  各方面优化
 todo  部署上线

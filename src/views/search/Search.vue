@@ -74,6 +74,7 @@
     width: 1166px;
     height: 434px;
     margin-left: -23px;
+    position: relative;
   }
   .content{
     background: rgba(56,180,71,0.7);
@@ -85,8 +86,25 @@
     font-size: 16px;
     text-align: center;
     line-height: 110px;
+    position: absolute;
+    left: 38%;
+    top: 35%;
     a{
       font-size: 22px;
+    }
+  }
+  @media screen and (max-width: 1024px) {
+    .content{
+      position: absolute;
+      left:0;
+      top:40%;
+      div{
+        text-align: left;
+        padding-left: 2rem;
+      }
+      a{
+        font-size: 16px;
+      }
     }
   }
 </style>

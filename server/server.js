@@ -8,8 +8,10 @@ const express = require('express')
 const app = express()
 const User = require('../db/user')
 const mongoose = require('mongoose');
+var cookieParser = require('cookie-parser')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cookieParser())
 mongoose.connect('mongodb://localhost:27017/runoob');
 var db = mongoose.connection;
 
@@ -24,6 +26,7 @@ db.once('open', function (callback) {
 /*
 **  搜索当前账号注册网站信息
 */
+
 app.post('/api/getInfo', function (req, res) {
   let phone = req.body.input;
   let t = urlList;
@@ -82,7 +85,8 @@ app.post('/api/signup', function (req, res) {
 */
 app.post('/api/login', function (req, res) {
   // 用户信息写入数据库 需要先查找没有找到的话就保存 TODO
- console.log('body', req.body)
+ res.cookie("phone", req.body.user.phone, {maxAge: 1000*60*60*24*30,httpOnly: false})
+// console.log('body', req.body)
  var user = new User(req.body.user)
  User.findOne({'phone': req.body.user.phone, pwd: req.body.user.pwd}, function (err, reo) {
    console.log("匹配", reo)
@@ -96,4 +100,4 @@ app.post('/api/login', function (req, res) {
 
 // 监听端口
 app.listen(9090)
-console.log('success listen at port:9090......')
+console.log('success listen at port:9090......和页面vue跑得端口不一样')
